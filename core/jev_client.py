@@ -60,9 +60,8 @@ def _fail(exc: Exception, what: str) -> NoReturn:
     status = _status_of(exc)
     hint = {401: "密钥被拒", 403: "没有权限", 404: "模型或地址不对", 422: "请求被拒",
             429: "被限流", 529: "服务过载"}.get(status, "")
-    detail = redact_secrets(str(exc)).strip()[:300]
     head = f"{what} HTTP {status}" if status else f"{what}失败"
-    raise JevError(f"{head}: {hint or detail or type(exc).__name__}", status) from None
+    raise JevError(f"{head}: {hint or '请检查网络和接口配置'}", status) from None
 
 
 def _api_key(env: str = JEV_ENV) -> str:
@@ -86,14 +85,21 @@ def _error_body(exc: urllib.error.HTTPError) -> str:
 
 
 def ask(state: dict, questions: dict, timeout: float = 20,
-        provider: str = "openrouter", model: str | None = None) -> dict:
+        provider: str = "zhipu", model: str | None = None, api_key: str | None = None) -> dict:
     """问 Jev 一轮判断，返回 {"answers": {名字: 答案}, "usage": {...}}。
 
     provider ∈ JEV_PROVIDERS（openrouter / typesafe 直连）；model=None 用该来源的默认模型。
     两条路返回的 dict 形状一模一样，429/529 都会退避重试。绝不打印或写出 key。
     """
-    spec = JEV_PROVIDERS.get(provider) or JEV_PROVIDERS["openrouter"]
-    key = _api_key(JEV_ENV)  # 两家共用同一把 key，换来源不用重填
+    if provider not in JEV_PROVIDERS:
+        raise JevError("未知判断供应商")
+    spec = JEV_PROVIDERS[provider]
+    if provider == "zhipu":
+        from .bigmodel import judge
+        from .providers import BIGMODEL_ENV
+        return judge(state, questions, api_key if api_key is not None else _api_key(BIGMODEL_ENV),
+                     model or spec.default, timeout)
+    key = api_key if api_key is not None else _api_key(JEV_ENV)
     model = model or spec.default
     if provider == "typesafe":
         return _ask_typesafe(state, questions, key, model, timeout)
@@ -187,6 +193,8 @@ def _ask_openrouter(state: dict, questions: dict, key: str, model: str, timeout:
 
 def list_models(provider: str, key: str, timeout: float = 10) -> list[str]:
     """某家能用的 Jev 模型 id，去重排序。失败抛 JevError（设置页直接显示这句话）。"""
+    if provider == "zhipu":
+        return [JEV_PROVIDERS["zhipu"].default]
     if provider == "typesafe":
         import typesafe_sdk
 
@@ -297,7 +305,7 @@ if __name__ == "__main__":
         return io.BytesIO(json.dumps(body).encode("utf-8"))
 
     with patch.object(urllib.request, "urlopen", _fake_urlopen):
-        assert ask({"chat": {}}, questions) == body
+        assert ask({"chat": {}}, questions, provider="openrouter") == body
     assert seen["url"] == OPENROUTER_DECISIONS
     assert seen["body"]["model"] == "typesafe/jev-1.13" and seen["body"]["questions"] == questions
 

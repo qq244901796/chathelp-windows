@@ -153,11 +153,11 @@ def _line(m) -> str:
     return f"{name if who == 'her' and name else who}: {text}"
 
 
-def draft_candidates(messages: list, relationship: str, provider: str = "deepseek",
+def draft_candidates(messages: list, relationship: str, provider: str = "zhipu",
                      model: str | None = None, base_url: str | None = None,
                      timeout: float = 30, keep: int = 10,
                      reply_to: str | None = None, style: str = "", thinking: bool = False,
-                     guidance: str | None = None) -> list[str]:
+                     guidance: str | None = None, api_key: str | None = None) -> list[str]:
     """messages: [(from, text)] 或 [(from, text, name)]，from ∈ {her, me}，name = 群里的发言人；
     只看最近 keep 条。返回最多 3 条中文候选（模型两次都给不够时可能少于 3，至少 1）。
 
@@ -186,8 +186,18 @@ def draft_candidates(messages: list, relationship: str, provider: str = "deepsee
         user += f"\n\n这是群聊。你要回复的是「{reply_to}」的话，三条候选都对 TA 说，不要@别人。"
     if guidance and guidance.strip():
         user += f"\n\n{guidance.strip()}"
+    if provider == "zhipu":
+        from .bigmodel import complete, replies
+        from .providers import BIGMODEL_ENV
+        key = api_key if api_key is not None else _api_key(BIGMODEL_ENV)
+        system = SYSTEM[:SYSTEM.rfind("输出：")] + '输出：仅输出 JSON 对象 {"replies":["回复一","回复二","回复三"]}。'
+        data, _ = complete(system, user, key, model or spec.default, timeout, temperature=0.7)
+        cands = _sanitize([_clean(x) for x in replies(data)], suspects, _her_recent(messages))
+        if len(cands) != 3:
+            raise JevError("智谱未返回三条不同的有效回复，请重试")
+        return cands
     user += "\n\n输出恰好 3 条候选，JSON 数组，每条一句。"
-    key = _api_key(LLM_ENV)  # 起草只有这一把 key，换来源不用重填
+    key = api_key if api_key is not None else _api_key(LLM_ENV)
     # 1.2：DeepSeek 自己推荐的闲聊档位，0.8 出来的话太板正
     # max_tokens：三句话本来 400 够，但思考过程也算进 max_tokens，开了思考模式 400 会把答案截断
     call = lambda turns: chat(  # noqa: E731 —— 三个参数会变，其余每次都一样

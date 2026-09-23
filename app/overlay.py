@@ -6,7 +6,7 @@ from math import isfinite
 from types import SimpleNamespace
 
 from PySide6.QtCore import QObject, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtGui import QColor, QFont, QIcon
 from PySide6.QtWidgets import (
     QApplication, QFrame, QHBoxLayout, QSizeGrip, QSizePolicy, QStackedWidget,
     QVBoxLayout, QWidget,
@@ -22,6 +22,7 @@ from app import settings
 from app.version import VERSION
 from core import jev_client, llm, providers
 from core.questions import CHOICE_LABELS
+from pathlib import Path
 
 _LOG_LINES = 300
 _MUTED = "#68776f"
@@ -81,6 +82,10 @@ class _Fetched(QObject):
     done = Signal(object, list, str)
 
 
+class _FlowTest(QObject):
+    done = Signal(object, str, bool)
+
+
 class _TitleBar(QWidget):
     """只有标题栏可拖动，选择正文或按按钮不会意外移动窗口。"""
     def __init__(self, parent):
@@ -122,7 +127,7 @@ class _ReplyCard(_Surface):
         top = QHBoxLayout()
         label = "推荐回复" if recommended else f"备选 {number}"
         if score is not None:
-            label += f" · {round(score * 100)}%"
+            label += f" · 模型估计 {round(score * 100)}%"
         top.addWidget(_label(label, 12, _GREEN if recommended else _MUTED, True))
         self.copyButton = _tool(FIF.COPY, "复制这条回复", lambda: owner._copy(index), self)
         self.copyButton.setFixedSize(24, 24)
@@ -151,7 +156,7 @@ class _ReplyCard(_Surface):
 
 class Overlay:
     def __init__(self, on_fill, on_toggle_capture=None, on_target_change=None, result_of=None,
-                 on_toggle_debug=None):
+                 on_toggle_debug=None, on_settings_saved=None):
         """result_of(会话名) → 那个会话上次的结果或 None；切着看别的会话时用它把旧结果放回来。
         on_target_change(会话名, 人名) → 用户在群里挑了回复对象。
         on_toggle_debug(开不开) → 开关调试视图那个独立窗口。"""
@@ -162,6 +167,7 @@ class Overlay:
         self.on_toggle_capture = on_toggle_capture
         self.on_target_change = on_target_change
         self.on_toggle_debug = on_toggle_debug
+        self.on_settings_saved = on_settings_saved
         self.result_of = result_of
         self.cands = []
         self.cards = []
@@ -178,7 +184,8 @@ class Overlay:
         self._shown = ""  # 界面上正在看的会话（浏览时和上面不一样）
         self.win = _MainWindow(self._relayout)
         self.win.setObjectName("assistantWindow")
-        self.win.setWindowTitle("Jev · 微信回复助手")
+        self.win.setWindowTitle("ChatHelp 智谱助手 · 非官方修改版")
+        self.win.setWindowIcon(QIcon(str(Path(__file__).resolve().parents[1] / "docs" / "icon.ico")))
         self.win.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.win.setStyleSheet(
             "QWidget#assistantWindow { background: #f5f7f6; border: 1px solid #dce3de; border-radius: 14px; }"
@@ -192,11 +199,11 @@ class Overlay:
         title = QHBoxLayout(header)
         title.setContentsMargins(18, 12, 10, 10)
         title.setSpacing(8)
-        name = _label("Jev", 20, "#233c2f", True)
-        name.setFixedWidth(40)
+        name = _label("ChatHelp", 17, "#233c2f", True)
+        name.setFixedWidth(82)
         name.setAttribute(Qt.WA_TransparentForMouseEvents)
         title.addWidget(name)
-        self.subtitle = _label("微信回复助手", 12, _MUTED)
+        self.subtitle = _label("智谱助手", 12, _MUTED)
         self.subtitle.setAttribute(Qt.WA_TransparentForMouseEvents)
         title.addWidget(self.subtitle, 1)
         self.captureSwitch = SwitchButton(header)
@@ -470,16 +477,10 @@ class Overlay:
         box.addWidget(self._hint(
             "开了以后群聊里可以选回复给谁，候选会针对 TA 写，填入时可带 @。关了就正常回复。"
         ))
-        update_row = QHBoxLayout()
-        update_row.addWidget(_label("启动时检查更新", 13), 1)
         self.updateSwitch = SwitchButton()
-        self.updateSwitch.setOnText("开")
-        self.updateSwitch.setOffText("关")
-        self.updateSwitch.setAccessibleName("启动时检查更新")
-        update_row.addWidget(self.updateSwitch)
-        box.addLayout(update_row)
+        self.updateSwitch.hide()
         box.addWidget(self._hint(
-            "只向 GitHub 查最新版本号，不发送任何数据。国内访问 GitHub 慢的话关掉也行。"
+            "此为非官方智谱修改版，不自动检查上游更新。版本下载地址见「关于」。"
         ))
         debug_row = QHBoxLayout()
         debug_row.addWidget(_label("调试视图", 13), 1)
@@ -501,16 +502,19 @@ class Overlay:
         box.setContentsMargins(16, 16, 16, 18)
         box.setSpacing(12)
         box.addWidget(_label("模型", 16, "#304c3c", True))
+        preset = PrimaryPushButton("一键应用智谱免费预设")
+        preset.clicked.connect(self._use_bigmodel)
+        box.addWidget(preset)
+        box.addWidget(self._hint("判断、起草、排序共用一把智谱 Key；默认 GLM-4-Flash-250414。免费政策以智谱为准，设置保存后生效。"))
         self._fetched = _Fetched()
         self._fetched.done.connect(self._models_fetched)
-        self.jev = self._model_group(box, "判断 · Jev", "jev", providers.JEV_PROVIDERS)
+        self.jev = self._model_group(box, "判断与排序", "jev", providers.JEV_PROVIDERS)
         box.addWidget(self._hint(
-            "判断意图、紧张度，并给三条候选排序。两家给的是同一个 Jev，必填。"
+            "判断意图、紧张度，并给三条候选排序。旧 Jev 接口保留为高级选项。"
         ))
         self.draft = self._model_group(box, "起草 · 语言模型", "draft", providers.DRAFT_PROVIDERS)
         box.addWidget(self._hint(
-            "写那三条候选。OpenAI / Anthropic / Gemini 三种接口都走各自官方 SDK。"
-            "默认 DeepSeek 官网直连，国内最快。"
+            "根据判断生成三条回复。默认使用国内智谱；其他供应商的费用以其平台为准。"
         ))
         think_row = QHBoxLayout()
         think_row.addWidget(_label("起草时开启思考模式", 13), 1)
@@ -525,6 +529,14 @@ class Overlay:
             "只有 " + " / ".join(providers.THINKING) + " 认这个开关。"
         ))
         body.addWidget(models)
+        self.flowTest = _FlowTest()
+        self.flowTest.done.connect(self._test_finished)
+        self.testButton = PushButton("测试完整流程（虚构对话）")
+        self.testButton.clicked.connect(self._test_flow)
+        body.addWidget(self.testButton)
+        about = PushButton("关于、开源许可与隐私")
+        about.clicked.connect(self._about)
+        body.addWidget(about)
         self.settingsFeedback = _label("", 13, _GREEN)
         self.settingsFeedback.hide()
         body.addWidget(self.settingsFeedback)
@@ -550,9 +562,8 @@ class Overlay:
     def _model_group(self, box, title, kind, table):
         """一组「来源 / 密钥 / 模型」控件，判断和起草各一份。table 是 core/providers.py 里那张表。"""
         group = SimpleNamespace(kind=kind, table=table, ids=list(table),
-                                keyTitle="判断" if kind == "jev" else "起草",
-                                stored_key=lambda k=kind: (settings.jev_key() if k == "jev"
-                                                           else settings.llm_key()))
+                                keyTitle="判断" if kind == "jev" else "起草")
+        group.stored_key = lambda: settings.key_for(group.kind, self._provider_of(group))
         heading = QHBoxLayout()
         heading.addWidget(_label(title, 14, "#304c3c", True), 1)
         group.keyState = _label("", 12, _GREEN)
@@ -576,15 +587,15 @@ class Overlay:
             self.baseLabel.setBuddy(self.baseEdit)
             box.addWidget(self.baseEdit)
         key_label = _label("密钥", 13)
+        group.keyLabel = key_label
         box.addWidget(key_label)
         group.keyEdit = PasswordLineEdit()
         group.keyEdit.setAccessibleName(f"{title} API 密钥")
         key_label.setBuddy(group.keyEdit)
         group.keyEdit.returnPressed.connect(self._save)
         box.addWidget(group.keyEdit)
-        box.addWidget(self._hint(
-            "OpenRouter 的 key 或 TypeSafe 的 key，看上面选的来源。" if kind == "jev"
-            else "上面选哪家就填哪家的 key；换来源重填一次，只存这一把。"))
+        group.keyHint = self._hint("智谱密钥与旧供应商隔离保存；切换供应商不会转发已存密钥。")
+        box.addWidget(group.keyHint)
         model_label = _label("模型", 13)
         box.addWidget(model_label)
         row = QHBoxLayout()
@@ -611,6 +622,7 @@ class Overlay:
     def _provider_changed(self, group):
         """换来源：模型框回到这家该有的值（存的就是这家才用存的，否则用它的默认），状态清掉。"""
         provider = self._provider_of(group)
+        group.keyEdit.clear()
         saved = settings.jev_provider() if group.kind == "jev" else settings.draft_provider()
         stored = settings.jev_model() if group.kind == "jev" else settings.draft_model()
         group.modelBox.clear()
@@ -635,13 +647,19 @@ class Overlay:
         custom = self._provider_of(self.draft) in providers.CUSTOM
         self.baseLabel.setVisible(custom)
         self.baseEdit.setVisible(custom)
+        shared = self._provider_of(self.jev) == self._provider_of(self.draft) == "zhipu"
+        self.draft.keyLabel.setVisible(not shared)
+        self.draft.keyEdit.setVisible(not shared)
+        self.draft.keyHint.setText("与上面的智谱密钥共用，无需重复填写。" if shared else
+                                   "请填写所选供应商的密钥；智谱使用独立密钥配置。")
+        self.thinkingSwitch.setEnabled(self._provider_of(self.draft) != "zhipu")
 
     def _fetch_models(self, group):
         """「获取模型」：拿填的 key（没填就拿存的）去问接口，网络调用丢后台线程。"""
         provider = self._provider_of(group)
         custom = group.kind == "draft" and provider in providers.CUSTOM
         base = self.baseEdit.text().strip() if custom else None
-        key = group.keyEdit.text().strip() or group.stored_key()
+        key = self._form_key(group)
         if not key:
             group.status.setText("先填密钥")
             return
@@ -656,19 +674,24 @@ class Overlay:
     def _list_models(self, group, provider, key, base):
         """后台线程：判断走 jev_client，起草按协议走 llm；失败把原因一起送回主线程。"""
         try:
-            if group.kind == "jev":
+            if provider == "zhipu":
+                models = [providers.BIGMODEL_MODEL]
+            elif group.kind == "jev":
                 models = jev_client.list_models(provider, key)
             else:
                 spec = providers.DRAFT_PROVIDERS[provider]
                 models = llm.list_models(spec.protocol, base or spec.base, key)
             reason = "" if models else "这个来源没返回任何模型"
         except Exception as exc:  # 线程里漏异常会静默吞掉，按钮就永远停在禁用态
-            models, reason = [], str(exc)[:120]
-        self._fetched.done.emit(group, models, reason)
+            models, reason = [], "获取失败，请检查所选供应商的密钥与网络"
+        self._fetched.done.emit((group, provider, base), models, reason)
 
-    def _models_fetched(self, group, models, reason):
+    def _models_fetched(self, request, models, reason):
         """回到主线程：填进下拉框，原来选中的还在列表里就留着。"""
+        group, provider, base = request
         group.fetchButton.setEnabled(True)
+        if provider != self._provider_of(group) or (base is not None and base != self.baseEdit.text().strip()):
+            return
         if not models:
             group.status.setText(reason or "获取失败，检查密钥、网络或 Base URL")
             return
@@ -726,7 +749,7 @@ class Overlay:
             return
         for group, provider in ((self.jev, jev_provider), (self.draft, draft_provider)):
             name = group.table[provider].name
-            if not group.keyEdit.text().strip() and not group.stored_key():
+            if not self._form_key(group):
                 self._settings_feedback(f"请先填写 {group.keyTitle} 的 API 密钥。", error=True)
                 group.keyEdit.setFocus()
                 return
@@ -737,10 +760,10 @@ class Overlay:
         try:
             settings.save(relationship, self.contextBox.value(),
                           jev_provider_text=jev_provider,
-                          jev_key_text=self.jev.keyEdit.text().strip() or None,
+                          jev_key_text=self._form_key(self.jev) or None,
                           jev_model_text=self.jev.modelBox.text().strip(),
                           draft_provider_text=draft_provider,
-                          llm_key_text=self.draft.keyEdit.text().strip() or None,
+                          llm_key_text=self._form_key(self.draft) or None,
                           draft_model_text=self.draft.modelBox.text().strip(),
                           draft_base_url_text=base,
                           reply_target_on=self.targetSwitch.isChecked(),
@@ -751,12 +774,68 @@ class Overlay:
             self._settings_feedback("保存失败，请检查配置文件是否可写后重试。", error=True)
             return
         self._load_settings()
+        if self.on_settings_saved:
+            self.on_settings_saved()
         self._render_targets()  # 开关刚改过，回到首页时这一行该显该藏得重算一次
         self._settings_feedback("设置已保存，将用于下一次回复。")
         self.setupButton.hide()
         if not self.cands and not self._busy:
             self._empty_text()
             self.set_status("设置已就绪，等待新消息", "idle")
+
+    def _form_key(self, group):
+        if (group is self.draft and self._provider_of(self.jev) == "zhipu"
+                and self._provider_of(self.draft) == "zhipu"):
+            return self.jev.keyEdit.text().strip() or self.jev.stored_key()
+        return group.keyEdit.text().strip() or group.stored_key()
+
+    def _use_bigmodel(self):
+        key = self.jev.keyEdit.text() if self._provider_of(self.jev) == "zhipu" else ""
+        self._set_group(self.jev, "zhipu", providers.BIGMODEL_MODEL)
+        self._set_group(self.draft, "zhipu", providers.BIGMODEL_MODEL)
+        self.jev.keyEdit.setText(key)
+        self.baseEdit.clear()
+        self.thinkingSwitch.setChecked(False)
+        self._sync_model_fields()
+        self._settings_feedback("智谱预设已填入；请填写密钥，测试后保存。")
+
+    def _form_config(self):
+        return dict(relationship=_RELATIONSHIPS[self.relationshipBox.currentIndex()][1] or self.relEdit.text().strip(),
+                    context=self.contextBox.value(), style=self.styleEdit.text().strip(),
+                    provider=self._provider_of(self.draft), model=self.draft.modelBox.text().strip(),
+                    jev_provider=self._provider_of(self.jev), jev_model=self.jev.modelBox.text().strip(),
+                    base_url=self.baseEdit.text().strip() if self._provider_of(self.draft) in providers.CUSTOM else None,
+                    thinking=self.thinkingSwitch.isChecked(),
+                    judge_api_key=self._form_key(self.jev), draft_api_key=self._form_key(self.draft))
+
+    def _test_flow(self):
+        config = self._form_config()
+        if not config["judge_api_key"] or not config["draft_api_key"]:
+            self._settings_feedback("请先填写所选模型的密钥。", error=True)
+            return
+        self.testButton.setEnabled(False)
+        self._settings_feedback("正在用虚构对话测试判断、起草和排序…")
+        def run():
+            from core.engine import analyze
+            try:
+                analyze([("me", "明天下午有空"), ("her", "那我们三点在图书馆见？")],
+                        config["relationship"], request_config=config)
+                message, failed = "完整流程通过：七项判断、三条回复及排序均有效。点击保存后用于聊天。", False
+            except Exception:
+                message, failed = "测试失败，请检查密钥、模型和网络；未保存任何设置。", True
+            self.flowTest.done.emit(config, message, failed)
+        threading.Thread(target=run, daemon=True).start()
+
+    def _test_finished(self, config, message, failed):
+        self.testButton.setEnabled(True)
+        if config != self._form_config():
+            self._settings_feedback("设置已变化，请重新测试当前配置。")
+            return
+        self._settings_feedback(message, error=failed)
+
+    def _about(self):
+        from app.legal import show_legal
+        show_legal(self.win)
 
     def _debug_toggled(self, on):
         """调试视图独立于「保存设置」：拨一下就开窗/收窗，顺手落盘，重启还在。"""

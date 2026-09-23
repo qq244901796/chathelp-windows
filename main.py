@@ -19,6 +19,7 @@ from app.fill import fill
 from app.overlay import Overlay
 from app.version import VERSION
 from core.engine import analyze
+from core.session import Session
 
 # {会话名: {history, result, rev, target, senders}}：每个会话各自的上下文、上次结果和版本号，互不串味
 # history 里是 [(who, text, name)]，engine 只认 her/me，name 是群里的发言人（单聊/自己说的是 None）；
@@ -28,6 +29,7 @@ chats = {}
 state = {"area": None, "busy": False, "rerun": None, "hwnd": None, "chat": ""}
 results = queue.Queue()
 update_result = queue.Queue()  # 独立小队列，别跟 results 的 (kind, r, title, revision) 形状搅在一起
+session = Session()
 
 
 def chat_of(title):
@@ -44,6 +46,14 @@ def target_of(title):
 
 
 def fill_reply(text):
+    title = ov.current_chat()
+    chat = chat_of(title)
+    target = target_of(title) if settings.reply_target() else None
+    ticket = chat.get("ticket")
+    if (title != state["chat"] or ticket is None or state["busy"] or
+            not session.accepts(ticket, title, chat["rev"], target) or
+            text not in (chat.get("result") or {}).get("candidates", [])):
+        raise RuntimeError("建议已过期，请等待当前会话的新建议")
     if state["hwnd"] is None:  # 子进程重开过，hwnd 可能换了，用最新的
         raise RuntimeError("未找到微信窗口，请确认微信已打开")
     if state["area"] is None:
@@ -90,6 +100,7 @@ def on_toggle_capture(on):
     """标题栏开关。启动时没找到微信就没有子进程，这会儿再找一次，找到了才真开得起来。"""
     global child
     if not on:
+        invalidate_results()
         capture_on.clear()
         return
     if child is None:
@@ -102,20 +113,22 @@ def on_toggle_capture(on):
     capture_on.set()
 
 
-def analyze_bg(msgs, title, revision, reply_to=None):
+def invalidate_results():
+    session.invalidate()
+    state["rerun"] = None
+    for chat in chats.values():
+        chat["result"] = None
+        chat["ticket"] = None
+    ov.invalidate_replies()
+
+
+def analyze_bg(msgs, title, ticket, config, reply_to=None):
     """后台线程只跑网络调用，结果丢队列；UI 只在主线程的 tick 里动（Qt 不能跨线程碰）。"""
     try:
-        results.put(("ok", analyze(msgs, settings.relationship(), context=settings.context(),
-                                   model=settings.draft_model() or None,
-                                   provider=settings.draft_provider(),
-                                   base_url=settings.draft_base_url() or None,
-                                   reply_to=reply_to, style=settings.style(),
-                                   thinking=settings.thinking(),
-                                   jev_provider=settings.jev_provider(),
-                                   jev_model=settings.jev_model() or None),
-                     title, revision))
+        results.put(("ok", analyze(msgs, config["relationship"], request_config=config,
+                                   reply_to=reply_to), title, ticket))
     except Exception as e:
-        results.put(("err", f"分析失败: {e}", title, revision))
+        results.put(("err", "分析失败，请检查模型、密钥与网络。", title, ticket))
 
 
 def check_update_bg():
@@ -135,7 +148,9 @@ def start_analyze(title, msgs):
     state["busy"] = True
     ov.set_busy(True)
     reply_to = target_of(title) if settings.reply_target() else None  # 开关关着就是今天的行为
-    threading.Thread(target=analyze_bg, args=(msgs, title, chat_of(title)["rev"], reply_to),
+    ticket = session.ticket(title, chat_of(title)["rev"], reply_to)
+    config = settings.snapshot()
+    threading.Thread(target=analyze_bg, args=(msgs, title, ticket, config, reply_to),
                      daemon=True).start()
 
 
@@ -143,6 +158,7 @@ def on_target_change(title, name):
     """用户挑了回复对象：记下来，这个会话里有对方的话就照新对象重跑一次。"""
     chat = chat_of(title)
     chat["target"] = name
+    invalidate_results()
     msgs = list(chat["history"])
     if not any(m[0] == "her" for m in msgs):
         return
@@ -166,6 +182,8 @@ def drain():
             state["area"] = msg[1]
             continue
         if kind == "chat":  # 微信切了会话，界面跟过去（用户正浏览别的会话时也跟，微信是准的）
+            if msg[1] != state["chat"]:
+                invalidate_results()
             state["chat"] = msg[1]
             ov.set_chat(msg[1])
             continue
@@ -184,6 +202,7 @@ def drain():
             ov.set_capture(True)
             continue
         if kind == "dead":  # 采集彻底停了（微信关了之类），这才是真的要清状态
+            invalidate_results()
             state["area"] = None
             for c in chats.values():  # 在跑的分析作废，回来的结果不再往界面上贴
                 c["rev"] += 1
@@ -201,6 +220,8 @@ def drain():
         state["area"] = area
         chat = chat_of(title)
         chat["rev"] += 1  # 这个会话有新消息了，它在跑的分析作废
+        chat["result"] = None
+        chat["ticket"] = None
         if title == ov.current_chat():  # 看的是别的会话就别把人家的候选划掉
             ov.invalidate_replies()
         for who, name, text in new:
@@ -231,17 +252,19 @@ def tick():
             latest, url = update_result.get()
             ov.set_update(latest, url)
         while not results.empty():
-            kind, r, title, revision = results.get()
+            kind, r, title, ticket = results.get()
             state["busy"] = False
             if state["rerun"]:  # 分析期间又来了新消息，接着跑最新的
                 (t, msgs), state["rerun"] = state["rerun"], None
                 start_analyze(t, msgs)
                 continue
-            if revision != chat_of(title)["rev"]:  # 这个会话后来又说话了，这份结果过期了
+            target = target_of(title) if settings.reply_target() else None
+            if not session.accepts(ticket, state["chat"], chat_of(title)["rev"], target):
                 ov.set_busy(False)
                 continue
             if kind == "ok":
                 chat_of(title)["result"] = r  # 先存着；正看着这个会话才立刻贴上去
+                chat_of(title)["ticket"] = ticket
                 if title == ov.current_chat():
                     ov.show(r)
                 else:
@@ -251,18 +274,23 @@ def tick():
                 ov.set_status("生成失败，请检查网络和服务设置；新消息到来后会重试。", "error")
                 ov.log(r)
     except Exception:
-        traceback.print_exc()  # 一帧出错不退出
+        ov.set_status("处理失败，请暂停后重新开启采集。", "error")
     ov.after(50, tick)
 
 
 if __name__ == "__main__":  # Windows 的 spawn 会让子进程重新执行本文件，没这行就无限套娃开进程
     multiprocessing.freeze_support()  # 打包成 exe 后 spawn 出来的子进程会重跑一遍 exe，没这行就无限弹界面
+    import sys
+    if len(sys.argv) == 3 and sys.argv[1] == "--smoke-test":
+        from app.smoke import run
+        sys.exit(run(sys.argv[2]))
     ctypes.windll.user32.SetProcessDPIAware()
     q = multiprocessing.Queue()
     capture_on = multiprocessing.Event()  # 父子进程共用的开关，置位=采集
     debug_on = multiprocessing.Event()  # 同上，置位=子进程往队列里送整帧给调试窗
     ov = Overlay(on_fill=fill_reply, on_toggle_capture=on_toggle_capture,
                  on_target_change=on_target_change, on_toggle_debug=set_debug,
+                 on_settings_saved=invalidate_results,
                  result_of=lambda t: chats.get(t, {}).get("result"))
     child = dbg = None
     try:

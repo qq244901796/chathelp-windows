@@ -4,7 +4,7 @@ onedir 不是 onefile：PySide6 + onnxruntime 打出来 ~150MB，onefile 每次�
 只在 Windows 上跑，下面的 collect_all 也只认 Windows 上装好的那几个包。"""
 from PyInstaller.utils.hooks import collect_all
 
-NAME = "jev-chat-windows"
+NAME = "chathelp-glm"
 
 hiddenimports = [
     # spawn 出来的采集子进程按名字 import app.worker，再顺着它拉 capture/ocr；
@@ -12,9 +12,12 @@ hiddenimports = [
     "app.worker", "app.capture", "app.ocr", "app.fill", "app.overlay", "app.settings",
     "app.version", "app.update", "app.debugwin",  # debugwin 是开了调试视图才 import 的
     "core.engine", "core.draft", "core.jev_client", "core.questions", "core.providers",
-    "core.llm",
+    "core.llm", "core.bigmodel", "core.session", "app.legal", "app.smoke",
 ]
-datas, binaries = [], []
+datas = [(name, ".") for name in ("ABOUT.md", "PRIVACY.md", "LICENSING.md", "LICENSE", "NOTICE",
+         "COPYING", "THIRD_PARTY_NOTICES.md", "BUILDING.md", "CHANGELOG.md", "dependencies.json", "source-manifest.json")]
+datas += [("licenses", "licenses"), ("docs/icon.ico", "docs")]
+binaries = []
 for pkg in (
     "rapidocr_onnxruntime",  # .onnx 模型 + config.yaml 是包数据，不收就是启动即炸
     "onnxruntime",           # capi 下面那堆 DLL
@@ -58,6 +61,15 @@ a = Analysis(
     excludes=excludes,
     noarchive=False,
 )
+# QtGui's generic hook also collects PDF/virtual-keyboard plugins. This QWidget
+# app does not use them; their native dependencies would pull in QtWebEngine/QML.
+def needed_qt(entry):
+    path = entry[0].replace("\\", "/").lower()
+    leaf = path.rsplit("/", 1)[-1]
+    return not (leaf.startswith(("qt6qml", "qt6quick", "qt6pdf", "qt6virtualkeyboard"))
+                or leaf in ("qpdf.dll", "qtvirtualkeyboardplugin.dll"))
+a.binaries = [entry for entry in a.binaries if needed_qt(entry)]
+a.datas = [entry for entry in a.datas if needed_qt(entry)]
 pyz = PYZ(a.pure)
 
 exe = EXE(

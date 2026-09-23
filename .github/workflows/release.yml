@@ -1,61 +1,28 @@
-name: release
-
-# 推 v 开头的 tag 就出一个 Release；手动触发只出 artifact，方便试打包
+name: Windows build
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
-
+  pull_request:
+    branches: [glm]
 permissions:
-  contents: write  # 建 Release 要写权限
-
+  contents: read
 jobs:
   build:
-    runs-on: windows-latest  # 只能在 Windows 上打，PyInstaller 不能交叉编译
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: 写入版本号（tag 用 tag 名，手动触发用短 SHA）
-        shell: pwsh
-        run: |
-          $ver = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME -replace '^v','' } else { $env:GITHUB_SHA.Substring(0, 7) }
-          Set-Content -Path app/version.py -Value ('VERSION = "' + $ver + '"') -Encoding utf8
-
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.11.6'
           cache: pip
-
-      - name: 装依赖
-        run: pip install -r requirements.txt pyinstaller
-
-      - name: 打包
-        run: pyinstaller --noconfirm --clean jev.spec
-
-      - name: 压 zip（tag 用 tag 名，手动触发用短 SHA）
-        id: pack
-        shell: pwsh
+      - run: pip install -r requirements-lock.txt
+      - run: python -m unittest discover -s tests -v
+      - run: pyinstaller --noconfirm --clean jev.spec
+      - shell: pwsh
         run: |
-          $exe = 'dist\jev-chat-windows\jev-chat-windows.exe'
-          if (-not (Test-Path $exe)) { throw "exe 没生成：$exe" }
-          $ver = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME } else { $env:GITHUB_SHA.Substring(0, 7) }
-          $zip = "jev-chat-windows-$ver.zip"
-          Copy-Item -Path LICENSE, NOTICE -Destination 'dist\jev-chat-windows'
-          Compress-Archive -Path 'dist\jev-chat-windows' -DestinationPath $zip
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "zip=$zip"
-          "{0}  {1:N1} MB" -f $zip, ((Get-Item $zip).Length / 1MB)
-
-      - name: 上传构建产物
-        if: always()  # 失败时也把已经有的东西捞上来
-        uses: actions/upload-artifact@v4
+          Copy-Item LICENSE, NOTICE, COPYING, README.md, PRIVACY.md, LICENSING.md, BUILDING.md, THIRD_PARTY_NOTICES.md -Destination dist/chathelp-glm
+          Compress-Archive -Path dist/chathelp-glm -DestinationPath chathelp-windows-ci.zip
+      - uses: actions/upload-artifact@v4
         with:
-          name: jev-chat-windows
-          path: '*.zip'
-          if-no-files-found: warn
-
-      - name: 发 Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ steps.pack.outputs.zip }}
-          generate_release_notes: true
+          name: chathelp-windows-ci
+          path: chathelp-windows-ci.zip
+          if-no-files-found: error

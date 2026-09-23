@@ -16,3 +16,10 @@ wechat_probe.png
 build/
 dist/
 *.spec.bak
+_reports/
+outputs/
+*.key
+*.p12
+.env
+.env.*
+secrets.*

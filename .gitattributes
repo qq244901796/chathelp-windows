@@ -1,0 +1,3 @@
+# Upstream legal texts and distribution metadata are retained verbatim.
+licenses/** -text -whitespace
+COPYING -text -whitespace

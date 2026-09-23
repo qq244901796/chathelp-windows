@@ -24,10 +24,11 @@ def _add_usage(total: dict, one: dict | None) -> None:
 
 
 def analyze(messages: list, relationship: str, model: str | None = None,
-            timeout: float = 30, context: int = 10, provider: str = "deepseek",
+            timeout: float = 30, context: int = 10, provider: str = "zhipu",
             base_url: str | None = None, reply_to: str | None = None, style: str = "",
-            thinking: bool = False, jev_provider: str = "openrouter",
-            jev_model: str | None = None) -> dict:
+            thinking: bool = False, jev_provider: str = "zhipu",
+            jev_model: str | None = None, *, request_config: dict | None = None,
+            judge_api_key: str | None = None, draft_api_key: str | None = None) -> dict:
     """messages: [(from, text)] from ∈ {her, me}，最新一条在最后；
     群聊里可以带第三项 name（说这句话的人），单聊不带。
     context: 起草和判断各看最近多少条消息（用户设置里的「参考上下文」）。
@@ -45,23 +46,31 @@ def analyze(messages: list, relationship: str, model: str | None = None,
     三段式（issue #4）：先让 Jev 答 7 道判断题，把判断当小抄喂给起草，最后 Jev 只排序。
     判断那次挂了就退回老路：盲起草 + 判断和排序一次问完，行为跟以前一样。usage 是两次之和。
     """
+    if request_config is not None:
+        return analyze(messages, **dict(request_config), reply_to=reply_to)
+    strict = jev_provider == "zhipu" or provider == "zhipu"
     state = build_state(messages, relationship, keep=context, reply_to=reply_to)
     usage: dict = {}
     answers: dict = {}
     judged = False
     try:
         first = ask(state, dict(JUDGE_QUESTIONS), timeout=timeout,
-                    provider=jev_provider, model=jev_model)
+                    provider=jev_provider, model=jev_model, api_key=judge_api_key)
         answers = first.get("answers") or {}
         _add_usage(usage, first.get("usage"))
         judged = True
     except JevError:
+        if strict:
+            raise
         pass  # 退回盲起草 + 老的一次合问；错误不打日志（里面可能带请求内容）
 
     candidates = draft_candidates(messages, relationship, provider=provider, model=model,
                                   base_url=base_url, timeout=timeout, keep=context,
                                   reply_to=reply_to, style=style, thinking=thinking,
-                                  guidance=guidance_text(answers) if judged else None)
+                                  guidance=guidance_text(answers) if judged else None,
+                                  api_key=draft_api_key)
+    if not candidates:
+        raise JevError("没有可用回复，请重试")
 
     questions = {} if judged else dict(JUDGE_QUESTIONS)
     if len(candidates) >= 2:  # 起草只给了 1 条就没什么可排的，判断题照问
@@ -69,9 +78,9 @@ def analyze(messages: list, relationship: str, model: str | None = None,
     if questions:
         try:
             second = ask(state, questions, timeout=timeout,
-                         provider=jev_provider, model=jev_model)
+                         provider=jev_provider, model=jev_model, api_key=judge_api_key)
         except JevError:
-            if not judged:  # 老路只有这一次调用，挂了就是挂了
+            if strict or not judged:
                 raise
             second = {}  # 判断还在，只是没排上序：下面按第一条推荐
         answers = {**answers, **(second.get("answers") or {})}

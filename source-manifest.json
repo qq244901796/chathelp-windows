@@ -1,0 +1,628 @@
+[
+  {
+    "name": "altgraph",
+    "version": "0.17.5",
+    "status": "downloaded",
+    "file": "altgraph-0.17.5.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/7e/f8/97fdf103f38fed6792a1601dbc16cc8aac56e7459a9fff08c812d8ae177a/altgraph-0.17.5.tar.gz",
+    "sha256": "c87b395dd12fabde9c99573a9749d67da8d29ef9de0125c7f536699b4a9bc9e7",
+    "bytes": 48428
+  },
+  {
+    "name": "annotated-types",
+    "version": "0.8.0",
+    "status": "downloaded",
+    "file": "annotated_types-0.8.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/5f/56/a8120250d128bed162cd73c76d45f6ef9991f3e068f62a8ee060afa3104a/annotated_types-0.8.0.tar.gz",
+    "sha256": "13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7",
+    "bytes": 15893
+  },
+  {
+    "name": "anthropic",
+    "version": "1.8.0",
+    "status": "downloaded",
+    "file": "anthropic-1.8.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/65/b8/f4de0e90bbd641e86a1d6b20e017442033a2c1d2f5381799f82057115bd7/anthropic-1.8.0.tar.gz",
+    "sha256": "9c1783ed90f409617749a61c5ab98e20624a572626f2e0a15cea03ed8e1401e5",
+    "bytes": 1221762
+  },
+  {
+    "name": "anyio",
+    "version": "4.15.1",
+    "status": "downloaded",
+    "file": "anyio-4.15.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/a9/d2/f4d173e22df740bc37b1db102b386ba719b66e95b0f0d751f556b387e6d2/anyio-4.15.1.tar.gz",
+    "sha256": "9f28306018cbd6d329e64a36d58256edff76dd996fe423bc957326e578b82a94",
+    "bytes": 276966
+  },
+  {
+    "name": "certifi",
+    "version": "2026.7.22",
+    "status": "downloaded",
+    "file": "certifi-2026.7.22.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/a3/c2/24167ea9858356b47a87a50d39908bfdb72ceeefe0041586e704e5376b3a/certifi-2026.7.22.tar.gz",
+    "sha256": "741e2c3b351ddf169a738da9f2c048608ff7f2c5cc02f1ebc6b118bb090d5d55",
+    "bytes": 138112
+  },
+  {
+    "name": "cffi",
+    "version": "2.1.1",
+    "status": "downloaded",
+    "file": "cffi-2.1.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/9e/ef/008a1939e372c06329a3fce4279c02f328488f3526744906eeec3da7ad5f/cffi-2.1.1.tar.gz",
+    "sha256": "dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be",
+    "bytes": 530807
+  },
+  {
+    "name": "charset-normalizer",
+    "version": "3.5.1",
+    "status": "downloaded",
+    "file": "charset_normalizer-3.5.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/e5/3f/143b048436775b0f76ac3eec145c019e8173ccc2885c8f20319b996d5e83/charset_normalizer-3.5.1.tar.gz",
+    "sha256": "6117b84ea48435e5356dc737f5121485c30920ba43375fa7b434fd753df0eac3",
+    "bytes": 171764
+  },
+  {
+    "name": "colorama",
+    "version": "0.4.6",
+    "status": "downloaded",
+    "file": "colorama-0.4.6.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz",
+    "sha256": "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44",
+    "bytes": 27697
+  },
+  {
+    "name": "cryptography",
+    "version": "50.0.1",
+    "status": "downloaded",
+    "file": "cryptography-50.0.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/bb/ad/5d6702db60b1e40b41ef513b6967ff5848f307d50f8449baf1634f5908f1/cryptography-50.0.1.tar.gz",
+    "sha256": "5dd9bda1c12b4162f6ff568eeb5e0ff956c28d14406e875cfe8a63a2d414ff20",
+    "bytes": 880381
+  },
+  {
+    "name": "darkdetect",
+    "version": "0.8.0",
+    "status": "downloaded",
+    "file": "darkdetect-0.8.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/45/77/7575be73bf12dee231d0c6e60ce7fb7a7be4fcd58823374fc59a6e48262e/darkdetect-0.8.0.tar.gz",
+    "sha256": "b5428e1170263eb5dea44c25dc3895edd75e6f52300986353cd63533fe7df8b1",
+    "bytes": 7681
+  },
+  {
+    "name": "distro",
+    "version": "1.9.0",
+    "status": "downloaded",
+    "file": "distro-1.9.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz",
+    "sha256": "2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed",
+    "bytes": 60722
+  },
+  {
+    "name": "docstring_parser",
+    "version": "0.18.0",
+    "status": "downloaded",
+    "file": "docstring_parser-0.18.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/e0/4d/f332313098c1de1b2d2ff91cf2674415cc7cddab2ca1b01ae29774bd5fdf/docstring_parser-0.18.0.tar.gz",
+    "sha256": "292510982205c12b1248696f44959db3cdd1740237a968ea1e2e7a900eeb2015",
+    "bytes": 29341
+  },
+  {
+    "name": "flatbuffers",
+    "version": "25.12.19",
+    "status": "downloaded",
+    "file": "flatbuffers-25.12.19.tar.gz",
+    "url": "https://github.com/google/flatbuffers/archive/refs/tags/v25.12.19.tar.gz",
+    "sha256": "f81c3162b1046fe8b84b9a0dbdd383e24fdbcf88583b9cb6028f90d04d90696a",
+    "bytes": 2355743,
+    "notice_count": 3
+  },
+  {
+    "name": "GEOS",
+    "version": "3.13.1",
+    "status": "downloaded",
+    "file": "geos-3.13.1.tar.bz2",
+    "url": "https://download.osgeo.org/geos/geos-3.13.1.tar.bz2",
+    "sha256": "df2c50503295f325e7c8d7b783aca8ba4773919cde984193850cf9e361dfd28c",
+    "bytes": 6839955,
+    "notice_count": 5
+  },
+  {
+    "name": "google-auth",
+    "version": "2.58.0",
+    "status": "downloaded",
+    "file": "google_auth-2.58.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/ac/ca/f398a483ce5aad18ca2f735646e45ccee2439bd94a41a4ad0cfa646bd495/google_auth-2.58.0.tar.gz",
+    "sha256": "55e30cf15e737de92c5323d78cda8a83fcd57e7ffbaf900c4600039fd60a80fd",
+    "bytes": 380018
+  },
+  {
+    "name": "google-genai",
+    "version": "2.25.0",
+    "status": "downloaded",
+    "file": "google_genai-2.25.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/62/0a/a3b7856ca840031d4393dbdd97b67fe811b20061315ed68b67b5c85ca80d/google_genai-2.25.0.tar.gz",
+    "sha256": "ab603baa5eee0205926ad0f8d7f93e0400df6d67650e99c33e01ab228ea16ad6",
+    "bytes": 699564
+  },
+  {
+    "name": "h11",
+    "version": "0.16.0",
+    "status": "downloaded",
+    "file": "h11-0.16.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz",
+    "sha256": "4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1",
+    "bytes": 101250
+  },
+  {
+    "name": "httpcore",
+    "version": "1.0.9",
+    "status": "downloaded",
+    "file": "httpcore-1.0.9.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/06/94/82699a10bca87a5556c9c59b5963f2d039dbd239f25bc2a63907a05a14cb/httpcore-1.0.9.tar.gz",
+    "sha256": "6e34463af53fd2ab5d807f399a9b45ea31c3dfa2276f15a2c3f00afff6e176e8",
+    "bytes": 85484
+  },
+  {
+    "name": "httpcore2",
+    "version": "2.13.0",
+    "status": "downloaded",
+    "file": "httpcore2-2.13.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/15/8c/e925b1c92018abb3a1863ce1549d76d2381e334d21d65d4ac8f65dabd78a/httpcore2-2.13.0.tar.gz",
+    "sha256": "2adc8be4fb285fbcd6d894298db3b52c177e74b6674eda3a76bd36be3292a3db",
+    "bytes": 67740
+  },
+  {
+    "name": "httpx",
+    "version": "0.28.1",
+    "status": "downloaded",
+    "file": "httpx-0.28.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz",
+    "sha256": "75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc",
+    "bytes": 141406
+  },
+  {
+    "name": "httpx2",
+    "version": "2.13.0",
+    "status": "downloaded",
+    "file": "httpx2-2.13.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/b9/a0/e9deef4654132857b5a5dbe4eddd0ac59c2814500e11f2f5044cd81103ee/httpx2-2.13.0.tar.gz",
+    "sha256": "81bd07dc67a3701729ef1f777a3c00c915d4539604fdb5afd327f8682f6b7b44",
+    "bytes": 100290
+  },
+  {
+    "name": "idna",
+    "version": "3.20",
+    "status": "downloaded",
+    "file": "idna-3.20.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/f5/08/8eea9d4b8302028f3abb2c0813953f7aec26d33b7a8960ed760e65ff29fa/idna-3.20.tar.gz",
+    "sha256": "a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44",
+    "bytes": 216463
+  },
+  {
+    "name": "jiter",
+    "version": "0.17.0",
+    "status": "downloaded",
+    "file": "jiter-0.17.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/9c/1f/8176d92e001f86505424b41664032ae26a882bc9ca41a32c803f373f9195/jiter-0.17.0.tar.gz",
+    "sha256": "03e432f226a453851079fb84cd17c6da9991eab723e28d716f14ae3d906e0c12",
+    "bytes": 229037
+  },
+  {
+    "name": "numpy",
+    "version": "2.4.6",
+    "status": "downloaded",
+    "file": "numpy-2.4.6.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/d0/ad/fed0499ce6a338d2a03ebae59cd15093910c8875328855781952abf6c2fe/numpy-2.4.6.tar.gz",
+    "sha256": "f3a3570c4a2a16746ac2c31a7c7c7b0c186b95ce902e33db6f28094ed7387dda",
+    "bytes": 20735807
+  },
+  {
+    "name": "onnxruntime",
+    "version": "1.30.0",
+    "status": "downloaded",
+    "file": "onnxruntime-1.30.0.tar.gz",
+    "url": "https://github.com/microsoft/onnxruntime/archive/refs/tags/v1.30.0.tar.gz",
+    "sha256": "f6681ecbddf53898adf0cc9e8e9e84657485b84d2eca3c8aa353de6d7dd417ef",
+    "bytes": 278619110,
+    "notice_count": 8
+  },
+  {
+    "name": "openai",
+    "version": "3.19.0",
+    "status": "downloaded",
+    "file": "openai-3.19.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/e5/87/563fce6df3a12bbb5274b1432559c7cf267d1603d85d8a959b5c286d0d22/openai-3.19.0.tar.gz",
+    "sha256": "890174cae80a47357035477532b6eabbc3d31220f021896dcc2640943e87b78d",
+    "bytes": 1714573
+  },
+  {
+    "name": "opencv-python",
+    "version": "5.0.0.93",
+    "status": "downloaded",
+    "file": "opencv_python-5.0.0.93.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/79/4c/a438d23e09ce2033c09f7b784ad2fbdb0adf529e434101ed28f142226f98/opencv_python-5.0.0.93.tar.gz",
+    "sha256": "66aac3e5b5faa48d4025816592f3af19e4bfc2c68dec067bae2dbb4ca10aa9e2",
+    "bytes": 81802749
+  },
+  {
+    "name": "packaging",
+    "version": "26.3",
+    "status": "downloaded",
+    "file": "packaging-26.3.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz",
+    "sha256": "94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79",
+    "bytes": 313412
+  },
+  {
+    "name": "pefile",
+    "version": "2024.8.26",
+    "status": "downloaded",
+    "file": "pefile-2024.8.26.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/03/4f/2750f7f6f025a1507cd3b7218691671eecfd0bbebebe8b39aa0fe1d360b8/pefile-2024.8.26.tar.gz",
+    "sha256": "3ff6c5d8b43e8c37bb6e6dd5085658d658a7a0bdcd20b6a07b1fcfc1c4e9d632",
+    "bytes": 76008
+  },
+  {
+    "name": "pillow",
+    "version": "12.3.0",
+    "status": "downloaded",
+    "file": "pillow-12.3.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9/pillow-12.3.0.tar.gz",
+    "sha256": "3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce",
+    "bytes": 47025035
+  },
+  {
+    "name": "protobuf",
+    "version": "7.36.2",
+    "status": "downloaded",
+    "file": "protobuf-7.36.2.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/d9/89/5b8517baa72f84a67b8a307ba953c91057af618bf40bf676f3c03551f8f0/protobuf-7.36.2.tar.gz",
+    "sha256": "497d0463ff3316681da6c0b9e8d06cb465d61abce00b613ab42226175644d1bb",
+    "bytes": 512737
+  },
+  {
+    "name": "pyasn1",
+    "version": "0.6.4",
+    "status": "downloaded",
+    "file": "pyasn1-0.6.4.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/a4/9a/23310166d960def5897e91fe20e5b724601b02a22e84ba1f94232c0b7f67/pyasn1-0.6.4.tar.gz",
+    "sha256": "9c447d8431c947fe4c8febc4ed9e760bc29011a5b01e5c74b67025bd9fb8ce81",
+    "bytes": 151262
+  },
+  {
+    "name": "pyasn1_modules",
+    "version": "0.4.2",
+    "status": "downloaded",
+    "file": "pyasn1_modules-0.4.2.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/e9/e6/78ebbb10a8c8e4b61a59249394a4a594c1a7af95593dc933a349c8d00964/pyasn1_modules-0.4.2.tar.gz",
+    "sha256": "677091de870a80aae844b1ca6134f54652fa2c8c5a52aa396440ac3106e941e6",
+    "bytes": 307892
+  },
+  {
+    "name": "pyclipper",
+    "version": "1.4.0",
+    "status": "downloaded",
+    "file": "pyclipper-1.4.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/f6/21/3c06205bb407e1f79b73b7b4dfb3950bd9537c4f625a68ab5cc41177f5bc/pyclipper-1.4.0.tar.gz",
+    "sha256": "9882bd889f27da78add4dd6f881d25697efc740bf840274e749988d25496c8e1",
+    "bytes": 54489
+  },
+  {
+    "name": "pycparser",
+    "version": "3.0",
+    "status": "downloaded",
+    "file": "pycparser-3.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz",
+    "sha256": "600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29",
+    "bytes": 103492
+  },
+  {
+    "name": "pydantic",
+    "version": "2.13.5",
+    "status": "downloaded",
+    "file": "pydantic-2.13.5.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/53/ef/fc4f868f4e2cee79f863883abffceff107875f569b848507319842d2a681/pydantic-2.13.5.tar.gz",
+    "sha256": "51a9c5f7b2f8e636f04c6cada605d9b6a3bf1348fdf945a3d8869b19bba0ee08",
+    "bytes": 845750
+  },
+  {
+    "name": "pydantic_core",
+    "version": "2.46.5",
+    "status": "downloaded",
+    "file": "pydantic_core-2.46.5.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/af/f9/8a06bea35ef8daf588f707784c973a7046e0034c8d8cfb08828eeffb8b75/pydantic_core-2.46.5.tar.gz",
+    "sha256": "10416c15b8839ecc4ef4d0885da76da6fd0f67333a0eb8aff6d93c4b8f2910fc",
+    "bytes": 472262
+  },
+  {
+    "name": "pyinstaller",
+    "version": "6.22.3",
+    "status": "downloaded",
+    "file": "pyinstaller-6.22.3.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/63/41/f90302845945abd4ed647933ff5ee7c6ac93983187be67f897b6cb613331/pyinstaller-6.22.3.tar.gz",
+    "sha256": "05eb2f5615503e72939a7224d68b4aff572c6b0438ee4a17d0a4b481f399362d",
+    "bytes": 4437180
+  },
+  {
+    "name": "pyinstaller-hooks-contrib",
+    "version": "2026.7",
+    "status": "downloaded",
+    "file": "pyinstaller_hooks_contrib-2026.7.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/26/60/d881fa1ba8c160c18d8e6f782bb16ec4640c08bc08fc50f704c368ad4f9e/pyinstaller_hooks_contrib-2026.7.tar.gz",
+    "sha256": "5fbcaacb22c4f4aac869a127dce283f67a4b4cfcc37d496f2446603e6d68aefa",
+    "bytes": 175992
+  },
+  {
+    "name": "PySide6",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.11.2-src/pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "sha256": "cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8",
+    "bytes": 18053248,
+    "notice_count": 22
+  },
+  {
+    "name": "PySide6-Fluent-Widgets",
+    "version": "1.11.3",
+    "status": "downloaded",
+    "file": "pyside6_fluent_widgets-1.11.3.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/be/fa/7ccdf706cf06aa07be142d52606f10c84a0800f9c890faffc097a635c6b1/pyside6_fluent_widgets-1.11.3.tar.gz",
+    "sha256": "bfb86a12e0d88edf1a1b4327b79e84767771ba0d2a294c4cb1fe170e026ebc16",
+    "bytes": 1455676
+  },
+  {
+    "name": "PySide6_Addons",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.11.2-src/pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "sha256": "cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8",
+    "bytes": 18053248,
+    "notice_count": 22
+  },
+  {
+    "name": "PySide6_Essentials",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.11.2-src/pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "sha256": "cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8",
+    "bytes": 18053248,
+    "notice_count": 22
+  },
+  {
+    "name": "PySideSix-Frameless-Window",
+    "version": "0.8.2",
+    "status": "downloaded",
+    "file": "pysidesix_frameless_window-0.8.2.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/37/3c/7a564b422b5dd42dcfcf30cff308565ffedd1c6f117433b80854857d48a1/pysidesix_frameless_window-0.8.2.tar.gz",
+    "sha256": "3cbbf8afd390da9ea43fc97d4a3a42c536aaf08d244a722b114eff0054b7ff0c",
+    "bytes": 23369
+  },
+  {
+    "name": "Python",
+    "version": "3.11.6",
+    "status": "downloaded",
+    "file": "Python-3.11.6.tar.xz",
+    "url": "https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tar.xz",
+    "sha256": "0fab78fa7f133f4f38210c6260d90d7c0d5c7198446419ce057ec7ac2e6f5f38",
+    "bytes": 20067204,
+    "notice_count": 11
+  },
+  {
+    "name": "pywin32",
+    "version": "312",
+    "status": "downloaded",
+    "file": "pywin32-312.tar.gz",
+    "url": "https://github.com/mhammond/pywin32/archive/refs/tags/b312.tar.gz",
+    "sha256": "71d959a9f18cf86001e5dca1e30d5046c187eabbb08112cb6ff01e04689f6f7b",
+    "bytes": 4807297,
+    "notice_count": 9
+  },
+  {
+    "name": "pywin32-ctypes",
+    "version": "0.2.3",
+    "status": "downloaded",
+    "file": "pywin32-ctypes-0.2.3.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/85/9f/01a1a99704853cb63f253eea009390c88e7131c67e66a0a02099a8c917cb/pywin32-ctypes-0.2.3.tar.gz",
+    "sha256": "d162dc04946d704503b2edc4d55f3dba5c1d539ead017afa00142c38b9885755",
+    "bytes": 29471
+  },
+  {
+    "name": "PyYAML",
+    "version": "6.0.3",
+    "status": "downloaded",
+    "file": "pyyaml-6.0.3.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz",
+    "sha256": "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f",
+    "bytes": 130960
+  },
+  {
+    "name": "qtbase",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "qtbase-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/archive/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz",
+    "sha256": "5b2e00eccaf5a4d8c14134ffa0ea8dfd0a35ae1ffc7f8d87fa4305a1ed23cf22",
+    "bytes": 50582668,
+    "notice_count": 105
+  },
+  {
+    "name": "qtimageformats",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "qtimageformats-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/archive/qt/6.11/6.11.2/submodules/qtimageformats-everywhere-src-6.11.2.tar.xz",
+    "sha256": "cecd8900f34b6550076309bc94f62f828008b633a4239e0a08c86788f41001f8",
+    "bytes": 2050424,
+    "notice_count": 10
+  },
+  {
+    "name": "qtsvg",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "qtsvg-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/archive/qt/6.11/6.11.2/submodules/qtsvg-everywhere-src-6.11.2.tar.xz",
+    "sha256": "d594337feca84c26fb67fe87b85e6a5c12fda404b611d905f9d138210c311876",
+    "bytes": 2341860,
+    "notice_count": 10
+  },
+  {
+    "name": "qttranslations",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "qttranslations-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/archive/qt/6.11/6.11.2/submodules/qttranslations-everywhere-src-6.11.2.tar.xz",
+    "sha256": "021684c1a7937a9fabc3b056a6698ad5978794caf9ac190fd6cc11399e67c014",
+    "bytes": 1691056,
+    "notice_count": 5
+  },
+  {
+    "name": "rapidocr-onnxruntime",
+    "version": "1.4.4",
+    "status": "downloaded",
+    "file": "RapidOCR-1.4.4.tar.gz",
+    "url": "https://github.com/RapidAI/RapidOCR/archive/refs/tags/v1.4.4.tar.gz",
+    "sha256": "56d2f44d3f53eed1a0db200a50cce72e98ce0f65e58fda6eacff2e6c06f87375",
+    "bytes": 1716952,
+    "notice_count": 1
+  },
+  {
+    "name": "requests",
+    "version": "2.34.2",
+    "status": "downloaded",
+    "file": "requests-2.34.2.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz",
+    "sha256": "f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed",
+    "bytes": 142856
+  },
+  {
+    "name": "setuptools",
+    "version": "65.5.0",
+    "status": "downloaded",
+    "file": "setuptools-65.5.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/c5/41/247814d8b7a044717164c74080725a6c8f3d2b5fc82b34bd825b617df663/setuptools-65.5.0.tar.gz",
+    "sha256": "512e5536220e38146176efb833d4a62aa726b7bbff82cfbc8ba9eaa3996e0b17",
+    "bytes": 2616463
+  },
+  {
+    "name": "shapely",
+    "version": "2.1.2",
+    "status": "downloaded",
+    "file": "shapely-2.1.2.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/4d/bc/0989043118a27cccb4e906a46b7565ce36ca7b57f5a18b78f4f1b0f72d9d/shapely-2.1.2.tar.gz",
+    "sha256": "2ed4ecb28320a433db18a5bf029986aa8afcfd740745e78847e330d5d94922a9",
+    "bytes": 315489
+  },
+  {
+    "name": "shiboken6",
+    "version": "6.11.2",
+    "status": "downloaded",
+    "file": "pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "url": "https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.11.2-src/pyside-setup-everywhere-src-6.11.2.tar.xz",
+    "sha256": "cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8",
+    "bytes": 18053248,
+    "notice_count": 22
+  },
+  {
+    "name": "six",
+    "version": "1.17.0",
+    "status": "downloaded",
+    "file": "six-1.17.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz",
+    "sha256": "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81",
+    "bytes": 34031
+  },
+  {
+    "name": "sniffio",
+    "version": "1.3.1",
+    "status": "downloaded",
+    "file": "sniffio-1.3.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58d80074f81b7d5121207425c964ddf5cfdbd/sniffio-1.3.1.tar.gz",
+    "sha256": "f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc",
+    "bytes": 20372
+  },
+  {
+    "name": "tenacity",
+    "version": "9.1.4",
+    "status": "downloaded",
+    "file": "tenacity-9.1.4.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/47/c6/ee486fd809e357697ee8a44d3d69222b344920433d3b6666ccd9b374630c/tenacity-9.1.4.tar.gz",
+    "sha256": "adb31d4c263f2bd041081ab33b498309a57c77f9acf2db65aadf0898179cf93a",
+    "bytes": 49413
+  },
+  {
+    "name": "tqdm",
+    "version": "4.70.1",
+    "status": "downloaded",
+    "file": "tqdm-4.70.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/0d/ea/b2a5bd54b28a324dae8211928b2d730b6547500342c7e6c6dea08bd0a485/tqdm-4.70.1.tar.gz",
+    "sha256": "cefd0eca11b2a37a3aee776544d4f4ae913f02688135b5556b8788dfa474afc4",
+    "bytes": 171846
+  },
+  {
+    "name": "truststore",
+    "version": "0.10.4",
+    "status": "downloaded",
+    "file": "truststore-0.10.4.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/53/a3/1585216310e344e8102c22482f6060c7a6ea0322b63e026372e6dcefcfd6/truststore-0.10.4.tar.gz",
+    "sha256": "9d91bd436463ad5e4ee4aba766628dd6cd7010cf3e2461756b3303710eebc301",
+    "bytes": 26169
+  },
+  {
+    "name": "typesafe-sdk",
+    "version": "0.7.1",
+    "status": "downloaded",
+    "file": "typesafe_sdk-0.7.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/dc/d4/14d9a00c759c126c814f7cfc0b2a760768214cda0708a9af49577b321ee3/typesafe_sdk-0.7.1.tar.gz",
+    "sha256": "495ce9d81733b4f95edcb156e95042a7ec4bfd59972a1150ffa8ce1e11f85a54",
+    "bytes": 23062
+  },
+  {
+    "name": "typing-inspection",
+    "version": "0.4.4",
+    "status": "downloaded",
+    "file": "typing_inspection-0.4.4.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/a3/26/b09b8010994eccc3c09092e6b34058f36a460eea2d4c3e8b910c695975a0/typing_inspection-0.4.4.tar.gz",
+    "sha256": "547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47",
+    "bytes": 76928
+  },
+  {
+    "name": "typing_extensions",
+    "version": "4.16.0",
+    "status": "downloaded",
+    "file": "typing_extensions-4.16.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz",
+    "sha256": "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5",
+    "bytes": 113555
+  },
+  {
+    "name": "urllib3",
+    "version": "2.8.0",
+    "status": "downloaded",
+    "file": "urllib3-2.8.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz",
+    "sha256": "63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63",
+    "bytes": 458972
+  },
+  {
+    "name": "websockets",
+    "version": "16.1.1",
+    "status": "downloaded",
+    "file": "websockets-16.1.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/21/f7/bc3a25c5ec26ce62ce487690becc2f3710bbc7b33338f005ad390db0b986/websockets-16.1.1.tar.gz",
+    "sha256": "db234eda965dcce15df96bb9709f587cd87d4d52aaf0e80e2f34ec04c7670c57",
+    "bytes": 182204
+  },
+  {
+    "name": "windows-capture",
+    "version": "2.0.1",
+    "status": "downloaded",
+    "file": "windows_capture-2.0.1.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/85/00/326a51bc2b27bc53e2a3e6d0c8f320af7e65f8315fb0d1d149699ca45995/windows_capture-2.0.1.tar.gz",
+    "sha256": "2c2b394f4587b067cf520456f7f64c11b00380851b077a4d061fe5356a9a7645",
+    "bytes": 148413
+  }
+]
